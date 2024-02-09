@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<audio id="audio" src="./audio/treck1.mp3"></audio>
+<div id="controls">
+	<meta charset="UTF-8">
+    <div class="audio-track"><div class="time"></div></div>
+	<div style="text-align: center">
+    <button class="play">Играть</button>
+    <button class="pause">Пауза</button>
+    <button class="prev">Пред.</button>
+    <button class="next">След.</button>
+	<p><iframe class="img" frameborder="0" height="3" scrolling="no" src="https://img.freepik.com/premium-photo/beautiful-picture_456341-459.jpg" width="24"></iframe></p>
+	</div>
+</div>
+<html>
+<head>
+    <title>мпТРИшка mini</title>
+	<style>
+	.play, .pause, .prev, .next {
+		width: 24%;
+		height: 3em;
+		font-size: 2em;
+	}
+	.img  {
+		width: 45em;
+		height: 15em;
+		font-size: 2em;
+	}
+	.audio-track {
+		width: 100%;
+		height: 3em;
+		background-color: #dddddd;
+		margin: 20px 0;
+		text-align: center;
+	}
+	
+	.time {
+		width: 0;
+		height: 3em;
+		background-color: #474747;
+	}
+	</style>
+</head>
+<body>
+	
+	<script>
+	// JS код ниже
+	let audio = document.getElementById("audio");    // Берём элемент audio
+	let time = document.querySelector(".time");      // Берём аудио дорожку
+	let btnPlay = document.querySelector(".play");   // Берём кнопку проигрывания
+	let btnPause = document.querySelector(".pause"); // Берём кнопку паузы
+	let btnPrev = document.querySelector(".prev");   // Берём кнопку переключения предыдущего трека
+	let btnNext = document.querySelector(".next");   // Берём кнопку переключение следующего трека
+	// Массив с названиями песен
+	let playlist = [
+		'treck1.mp3',
+		'treck2.mp3',
+		'treck3.mp3',
+		'treck4.mp3',
+		'treck5.mp3',
+		'treck6.mp3',
+	];
+	
+	let treck; // Переменная с индексом трека
+	
+	// Событие перед загрузкой страницы
+	window.onload = function() {
+		treck = 0; // Присваиваем переменной ноль
+	}
+	function switchTreck (numTreck) {
+		// Меняем значение атрибута src
+		audio.src = './audio/' + playlist[numTreck];
+		// Назначаем время песни ноль
+		audio.currentTime = 0;
+		// Включаем песню
+		audio.play();
+	}
+	btnPlay.addEventListener("click", function() {
+		audio.play(); // Запуск песни
+		// Запуск интервала 
+		audioPlay = setInterval(function() {
+			// Получаем значение на какой секунде песня
+			let audioTime = Math.round(audio.currentTime);
+			// Получаем всё время песни
+			let audioLength = Math.round(audio.duration)
+			// Назначаем ширину элементу time
+			time.style.width = (audioTime * 100) / audioLength + '%';
+			// Сравниваем, на какой секунде сейчас трек и всего сколько времени длится
+			// И проверяем что переменная treck меньше четырёх
+			if (audioTime == audioLength && treck < 5) {
+				treck++; // То Увеличиваем переменную 
+				switchTreck(treck); // Меняем трек
+			// Иначе проверяем тоже самое, но переменная treck больше или равна четырём
+			} else if (audioTime == audioLength && treck >= 5) {
+				treck = 0; // То присваиваем treck ноль
+				switchTreck(treck); //Меняем трек
+			}
+		}, 10)
+	});
+	btnPause.addEventListener("click", function() {
+    audio.pause(); // Останавливает песню
+    clearInterval(audioPlay) // Останавливает интервал
+	});
+	btnPrev.addEventListener("click", function() {
+    // Проверяем что переменная treck больше нуля
+    if (treck > 0) {
+			treck--; // Если верно, то уменьшаем переменную на один
+			switchTreck(treck); // Меняем песню.
+    } else { // Иначе
+			treck = 5; // Присваиваем три
+			switchTreck(treck); // Меняем песню
+    }
+	});
+	btnNext.addEventListener("click", function() {
+    // Проверяем что переменная treck больше трёх
+    if (treck < 5) { // Если да, то
+			treck++; // Увеличиваем её на один
+			switchTreck(treck); // Меняем песню 
+    } else { // Иначе
+			treck = 0; // Присваиваем ей ноль
+			switchTreck(treck); // Меняем песню
+    }
+	});
+	</script>
+
+</body>
+</html>
