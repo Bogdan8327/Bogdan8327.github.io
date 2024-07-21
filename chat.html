@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -31,7 +30,7 @@
         });
 
         setInterval(async () => {
-            const response = await fetch('localhost:8000/?param1=get&param2=get');
+            const response = await fetch('http://localhost:8000/?param1=get&param2=get');
             const data = await response.text();
 
             // Проверка, не совпадает ли новый ответ с последним
