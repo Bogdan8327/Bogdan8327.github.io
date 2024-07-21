@@ -22,7 +22,7 @@
 
         sendButton.addEventListener('click', async () => {
             const inputValue = inputField.value;
-            const url = `http://2c7d3c4a-e589-431e-9d49-6dc53ebe38c1.tunnel4.com/?param1=send1&param2=${encodeURIComponent(inputValue)}`;
+            const url = `http://ad211b9a-9de1-4f32-89e6-a298681f636a.tunnel4.com/?param1=send1&param2=${encodeURIComponent(inputValue)}`;
 
             try {
                 await fetch(url);
@@ -33,7 +33,7 @@
         });
 
         setInterval(async () => {
-            const response = await fetch('http://2c7d3c4a-e589-431e-9d49-6dc53ebe38c1.tunnel4.com/?param1=get&param2=get');
+            const response = await fetch('http://ad211b9a-9de1-4f32-89e6-a298681f636a.tunnel4.com/?param1=get&param2=get');
             const data = await response.text();
 
             // Проверка, не совпадает ли новый ответ с последним
