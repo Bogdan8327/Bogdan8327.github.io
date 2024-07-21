@@ -1,0 +1,48 @@
+ПОМЕНЯЙ URL!!!
+ПОМЕНЯЙ URL!!!
+ПОМЕНЯЙ URL!!!
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HTTP Request Example</title>
+</head>
+<body>
+    <input type="text" id="inputField" placeholder="Введите текст">
+    <button id="sendButton">Отправить</button>
+    <textarea id="outputField" rows="10" cols="50" readonly></textarea>
+
+    <script>
+    	
+        const inputField = document.querySelector('#inputField');
+        const sendButton = document.querySelector('#sendButton');
+        const outputField = document.querySelector('#outputField');
+        let lastResponse = ''; // Переменная для хранения последнего ответа
+
+        sendButton.addEventListener('click', async () => {
+            const inputValue = inputField.value;
+            const url = `http://localhost:8000/?param1=send1&param2=${encodeURIComponent(inputValue)}`;
+
+            try {
+                await fetch(url);
+                inputField.value = ''; // Очистка поля ввода
+            } catch (error) {
+                console.error('Ошибка при отправке запроса:', error);
+            }
+        });
+
+        setInterval(async () => {
+            const response = await fetch('http://localhost:8000/?param1=get&param2=get');
+            const data = await response.text();
+
+            // Проверка, не совпадает ли новый ответ с последним
+            if (data !== lastResponse) {
+                outputField.value += data + '\n'; // Добавление ответа в многострочное поле
+                lastResponse = data; // Обновление последнего ответа
+                outputField.scrollTop = outputField.scrollHeight; // Прокрутка вниз
+            }
+        }, 200);
+    </script>
+</body>
+</html>
