@@ -7,11 +7,14 @@ let myCanvas;
 let ctx;
 let rawCanvas;
 
+let lastRendered = true
+
 function setup() {
     noCanvas();
 
     fileInput = createFileInput(handleFile);
     fileInput.position(0, 640);
+    fileInput.attribute('multiple', '');
 
     myCanvas = createElement('canvas');
     myCanvas.position(0, 0);
@@ -47,7 +50,10 @@ function setup() {
 function goodImgDraw(posx, posy, img) {
     let sizex = img.width / (img.height / scale)
     if (!(sizex + posx > rawCanvas.width)) {
+        lastRendered = true
         ctx.drawImage(img, posx, posy, sizex, scale)
+    } else {
+        lastRendered = false
     }
     return sizex
 }
@@ -59,7 +65,8 @@ function reDraw() {
     ctx.clearRect(0, 0, rawCanvas.width, rawCanvas.height) //CLEAR
     if (scale > 0 && imgs.length > 0)
         while (true) {
-            imageIndex += 1
+            if (lastRendered)
+                imageIndex += 1
             if (imageIndex === imgs.length) {
                 imageIndex = 0
             }
@@ -74,14 +81,23 @@ function reDraw() {
         }
 }
 
-function handleFile(file) {
-    if (file.type === 'image') {
+function handleFile(files) {
+    if (!Array.isArray(files)) {
+        files = [files];
+    }
+    let imagesToLoad = 0;
+    let imageFiles = files.filter(f => f.type === 'image');
+    if (imageFiles.length === 0) return;
+    imageFiles.forEach(file => {
+        imagesToLoad++;
         let img = new Image();
         img.src = file.data;
-
         img.onload = function() {
-            imgs.push(img)
-            reDraw()
+            imgs.push(img);
+            imagesToLoad--;
+            if (imagesToLoad === 0) {
+                reDraw()
+            }
         };
-    }
+    });
 }
