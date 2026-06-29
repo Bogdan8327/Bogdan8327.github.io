@@ -1,6 +1,7 @@
 let imgs = [];
 let scale = 100;
-
+let max = 1000;
+let counter;
 
 let fileInput;
 let myCanvas;
@@ -45,6 +46,36 @@ function setup() {
         scale -= 25
     })
     scaleDownButton.position(0, 680);
+
+
+    counter = createP("Макс: 1000")
+    counter.position(25, 700);
+
+    ctupp = createButton("+")
+    ctupp.mousePressed(function() {
+        max += 1
+        reDraw()
+    })
+    ctupp.position(0, 700);
+    ctddo = createButton("-")
+    ctddo.mousePressed(function() {
+        max -= 1
+        reDraw()
+    })
+    ctddo.position(100, 700);
+
+    ctuppx = createButton("++")
+    ctuppx.mousePressed(function() {
+        max += 100
+        reDraw()
+    })
+    ctuppx.position(0, 720);
+    ctddox = createButton("--")
+    ctddox.mousePressed(function() {
+        max -= 100
+        reDraw()
+    })
+    ctddox.position(100, 720);
 }
 
 function goodImgDraw(posx, posy, img) {
@@ -59,14 +90,18 @@ function goodImgDraw(posx, posy, img) {
 }
 
 function reDraw() {
+    counter.html("Макс:" + max)
     let renderX = 0;
     let renderY = 0;
     let imageIndex = 0;
     ctx.clearRect(0, 0, rawCanvas.width, rawCanvas.height) //CLEAR
     if (scale > 0 && imgs.length > 0)
-        while (true) {
-            if (lastRendered)
+        for (let i = 0; i < max; i++) {
+            if (lastRendered) {
                 imageIndex += 1
+            } else {
+                i--
+            }
             if (imageIndex === imgs.length) {
                 imageIndex = 0
             }
